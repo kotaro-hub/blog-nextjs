@@ -1,6 +1,6 @@
-// フェッチしてから
+import { NextResponse } from "next/server"
 
-export const sampleData = {
+const postData = {
   posts: [
     {
       id: "1",
@@ -52,30 +52,16 @@ export const sampleData = {
       tags: ["React", "TypeScript", "Git"]
     }
   ],
-  tags: [
-    {
-      tagTitle: "React"
-    },
-    {
-      tagTitle: "Next"
-    },
-    {
-      tagTitle: "Vue"
-    },
-    {
-      tagTitle: "Nuxt"
-    },
-    {
-      tagTitle: "Flutter"
-    },
-    {
-      tagTitle: "通信/インフラ"
-    },
-    {
-      tagTitle: "Git"
-    },
-    {
-      tagTitle: "TypeScript"
-    },
-  ]
+}
+
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const post = postData.posts.find(post => post.id === params.id);
+
+  if (!post) {
+    return NextResponse.error();
+  }
+  return NextResponse.json({ post })
 }

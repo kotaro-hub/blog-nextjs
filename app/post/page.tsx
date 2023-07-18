@@ -1,12 +1,14 @@
 "use client"
 
-import { forwardRef } from "react";
-import { Controller, useForm } from "react-hook-form";
 import { FormControl, FormLabel, FormHelperText, FormErrorMessage, Heading, VStack, Input, Box, Button, Textarea, Checkbox, CheckboxGroup } from "@chakra-ui/react"
-import { sampleTag } from "@/components/sampleData";
-import { postFormScheme } from "@/utils/validationScheme";
-import type { PostTag } from "@/types/post";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form"
+import useSWR from 'swr'
+import { postFormScheme } from "@/utils/validationScheme"
+import type { PostTag } from "@/types/post"
+import { zodResolver } from "@hookform/resolvers/zod"
+import Checkboxs from "@/components/checkBoxs"
+
+const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 type PostForm = {
   title: string,
@@ -15,6 +17,8 @@ type PostForm = {
 }
 
 const Post = () => {
+  const {data, error, isLoading} = useSWR('/api/tags', fetcher)
+  
   const {
     register,
     handleSubmit,
@@ -25,10 +29,13 @@ const Post = () => {
     shouldUnregister: false,
     resolver: zodResolver(postFormScheme),
   })
-
+  
   const onSubmit = (data: PostForm) => {
     console.log(data)
   }
+  
+  if (error) return <div>Failed to load</div>
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <VStack spacing="6" p="6">
@@ -53,16 +60,7 @@ const Post = () => {
               control={control}
               name="tag"
               render={({ field: { onChange, value } }) => (
-                <CheckboxGroup
-                  value={value}
-                  onChange={(values) => onChange(values)}
-                >
-                  {sampleTag.map((tag, i) => (
-                    <Checkbox value={tag.tagTitle} key={i} p={3}>
-                      {tag.tagTitle}
-                    </Checkbox>
-                  ))}
-                </CheckboxGroup>
+                <Checkboxs value={value} onChange={(values) => onChange(values)} />
               )}
             />
             <FormErrorMessage>{ errors.tag?.message }</FormErrorMessage>

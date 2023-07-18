@@ -1,17 +1,15 @@
 import "./globals.css"
 import { Roboto } from "next/font/google"
 
-import ChakraUIProvider from "@/components/provider"
-import AuthChecker from "@/components/authChecker";
-import { Suspense } from "react";
-import { NavigationEvents } from "@/utils/navigationEvents";
+import Provider from "@/components/provider"
+import AuthChecker from "@/components/authChecker"
 
 const roboto = Roboto({
   weight: ["400", "700"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
-});
+})
 
 export const metadata = {
   title: "blog",
@@ -23,14 +21,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="ja">
       <body className={roboto.className}>
-        <ChakraUIProvider>
+        <Provider>
           <AuthChecker>
             {children}  
-            <Suspense fallback={null}>
-              <NavigationEvents />
-            </Suspense>
           </AuthChecker>
-        </ChakraUIProvider>
+        </Provider>
       </body>
     </html>
   )

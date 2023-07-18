@@ -6,29 +6,33 @@ import { useBreakpointValue, Button, ButtonGroup, Card, CardBody, CardFooter, Di
 
 import { sampleData } from "@/components/sampleData"
 import { usePostStore } from "@/store/postStore"
+import { useMainStore } from "@/store/mainStore"
+import useSWR from 'swr'
+
+const fetcher = (url: string) => fetch(url).then(r => r.json())
+
 
 const ArticleLink = () => {
-  const { setPosts, posts } = usePostStore()
-  
-  useEffect(() => {
-    setPosts(sampleData)
-  }, [sampleData])
-  
+  const {data, error, isLoading} = useSWR('/api/store', fetcher)
+
   const gridColumns = useBreakpointValue({
     base: "repeat(1, 1fr)",
     md: "repeat(2, 1fr)",
     lg: "repeat(4, 1fr)",
-  });
+  })
+
+  if (error) return <div>Failed to load</div>
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <Grid templateColumns={gridColumns} gap={6} mt="12">
-      {posts.map(data => (
-        <GridItem key={data.id} m="0 auto" textAlign="center">
+      {data.sampleData.posts.map((post: any) => (
+        <GridItem key={post.id} m="0 auto" textAlign="center">
           <Card maxW="sm">
             <CardBody>
               <VStack>
                 <Image 
-                  src={ data.imgSrc }
+                  src={ post.imgSrc }
                   alt="Green double couch with wooden legs"
                   borderRadius="lg"
                   width="300"
@@ -36,14 +40,14 @@ const ArticleLink = () => {
                 />
               </VStack>
               <Stack mt="6" spacing="3">
-                <Heading size="md">{ data.title }</Heading>
-                <Text>{ data.content }</Text>
+                <Heading size="md">{ post.title }</Heading>
+                <Text>{ post.content }</Text>
               </Stack>
             </CardBody>
             <Divider />
             <CardFooter justifyContent="center">
               <ButtonGroup spacing="2">
-                <Link href={`/articles/${data.id}`}>
+                <Link href={`/detail/${post.id}`}>
                   <Button variant="solid" colorScheme="blue">
                     この記事を見る
                   </Button>
@@ -62,4 +66,4 @@ const ArticleLink = () => {
   )
 }
 
-export default ArticleLink;
+export default ArticleLink

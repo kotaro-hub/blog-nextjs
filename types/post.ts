@@ -8,3 +8,10 @@ export type PostTag =
 "Git" |
 "TypeScript"
 
+export type Post = {
+  id: string
+  title: string
+  content: string
+  imgSrc: string
+  tags: string[]
+}

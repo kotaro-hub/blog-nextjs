@@ -1,6 +1,6 @@
-// フェッチしてから
+import { NextResponse } from "next/server"
 
-export const sampleData = {
+const sampleData = {
   posts: [
     {
       id: "1",
@@ -78,4 +78,9 @@ export const sampleData = {
       tagTitle: "TypeScript"
     },
   ]
+}
+
+export async function GET(request: Request) {
+
+  return NextResponse.json({ sampleData })
 }

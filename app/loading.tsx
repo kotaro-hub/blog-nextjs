@@ -1,6 +1,6 @@
 const Loading = () => {
   // Or a custom loading skeleton component
-  return "Loading...";
+  return "Loading..."
 }
 
 export default Loading
