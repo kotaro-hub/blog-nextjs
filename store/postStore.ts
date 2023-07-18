@@ -1,12 +1,5 @@
 import { create } from "zustand"
-
-type Post = {
-  id: string
-  title: string
-  content: string
-  imgSrc: string
-  tags: string[]
-}
+import { Post } from "@/types/post"
 
 type Store = {
   posts: Post[]

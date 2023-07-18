@@ -1,28 +1,27 @@
 "use client"
 
-import { Image, Link } from "@chakra-ui/next-js";
-import { useBreakpointValue, Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Grid, GridItem, Heading, Stack, Text, VStack } from "@chakra-ui/react";
+import { Image, Link } from "@chakra-ui/next-js"
+import { useBreakpointValue, Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Grid, GridItem, Heading, Stack, Text, VStack } from "@chakra-ui/react"
 
-import { sampleData } from "@/components/sampleData"
-import { usePostStore } from "@/store/postStore";
-import { useEffect } from "react";
+import useSWR from 'swr'
+
+const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 const Gallery = () => {
-  const { setPosts, posts } = usePostStore()
-
-  useEffect(() => {
-    setPosts(sampleData)
-  }, [sampleData])
+  const {data, error, isLoading} = useSWR('/api/posts', fetcher)
 
   const gridColumns = useBreakpointValue({
     base: "repeat(1, 1fr)",
     md: "repeat(2, 1fr)",
     lg: "repeat(4, 1fr)",
-  });
+  })
+
+  if (error) return <div>Failed to load</div>
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <Grid templateColumns={gridColumns} gap={6} mt="12">
-      {posts.map(data => (
+      {data.postData.posts.map((data: any) => (
         <GridItem key={data.id} m="0 auto" textAlign="center">
           <Card maxW="sm">
             <CardBody>
@@ -43,7 +42,7 @@ const Gallery = () => {
             <Divider />
             <CardFooter justifyContent="center">
               <ButtonGroup spacing="2">
-                <Link href={`/articles/${data.id}`}>
+                <Link href={`/detail/${data.id}`}>
                   <Button variant="solid" colorScheme="blue">
                     この記事を見る
                   </Button>

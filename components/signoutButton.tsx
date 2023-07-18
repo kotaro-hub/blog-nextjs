@@ -1,9 +1,9 @@
 "use client"
 
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react"
-import { useModalStore } from "@/store/modalStore";
-import { useAuthStore } from "@/store/authStore";
-import { useRouter } from "next/navigation";
+import { useModalStore } from "@/store/modalStore"
+import { useAuthStore } from "@/store/authStore"
+import { useRouter } from "next/navigation"
 
 const SignoutButton = () => {
   const router = useRouter()
@@ -14,7 +14,7 @@ const SignoutButton = () => {
     router.push("/signin")
     onClose()
     logOut()
-  };
+  }
 
   return (
     <>
@@ -38,7 +38,7 @@ const SignoutButton = () => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}
 
 export default SignoutButton

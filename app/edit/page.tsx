@@ -1,33 +1,32 @@
 "use client"
 
-import { sampleData } from "@/components/sampleData"
-import { usePostStore } from "@/store/postStore"
 import { Image, Link } from "@chakra-ui/next-js"
 import { Button, Card, CardBody, CardFooter, Divider, Grid, GridItem, Heading, Stack, Text, useBreakpointValue, VStack } from "@chakra-ui/react"
-import { useEffect } from "react"
+import useSWR from 'swr'
+
+const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 const Edit = () => {
-  const { posts, setPosts } = usePostStore()
-
-  useEffect(() => {
-    setPosts(sampleData)
-  }, [sampleData])
-
+  const {data, error, isLoading} = useSWR('/api/posts', fetcher)
+  
   const gridColumns = useBreakpointValue({
     base: "repeat(1, 1fr)",
     md: "repeat(2, 1fr)",
     lg: "repeat(4, 1fr)",
-  });
+  })
+  
+  if (error) return <div>Failed to load</div>
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <Grid templateColumns={gridColumns} gap={6} mt="12">
-      {posts.map(data => (
-        <GridItem key={data.id} m="0 auto" textAlign="center">
+      {data.postData.posts.map((post: any) => (
+        <GridItem key={post.id} m="0 auto" textAlign="center">
           <Card maxW="sm">
             <CardBody>
               <VStack>
                 <Image 
-                  src={ data.imgSrc }
+                  src={ post.imgSrc }
                   alt="Green double couch with wooden legs"
                   borderRadius="lg"
                   width="300"
@@ -35,13 +34,13 @@ const Edit = () => {
                 />
               </VStack>
               <Stack mt="6" spacing="3">
-                <Heading size="md">{ data.title }</Heading>
-                <Text>{ data.content }</Text>
+                <Heading size="md">{ post.title }</Heading>
+                <Text>{ post.content }</Text>
               </Stack>
             </CardBody>
             <Divider />
             <CardFooter justifyContent="center">
-              <Link href={`/edit/${data.id}`}>
+              <Link href={`/edit/${post.id}`}>
                 <Button variant="solid" colorScheme="blue">
                   編集する
                 </Button>

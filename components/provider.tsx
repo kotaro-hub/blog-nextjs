@@ -1,8 +1,18 @@
 "use client"
 
 import { ChakraProvider } from "@chakra-ui/react"
+import { useEffect } from "react"
 
-const ChakraUIProvider = ({ children }: { children: React.ReactNode}) =>{
+import { sampleData } from "./sampleData"
+import { useMainStore } from "@/store/mainStore"
+
+const Provider = ({ children }: { children: React.ReactNode}) =>{
+  const { store, setStore } = useMainStore()
+
+  useEffect(() => {
+    setStore(sampleData)
+  }, [store])
+
   return (
     <ChakraProvider>
       {children}
@@ -10,4 +20,4 @@ const ChakraUIProvider = ({ children }: { children: React.ReactNode}) =>{
   )
 }
 
-export default ChakraUIProvider
+export default Provider
