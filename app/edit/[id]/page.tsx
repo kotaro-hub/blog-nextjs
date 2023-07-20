@@ -1,15 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import useSWR from 'swr'
+import { useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Textarea, VStack } from "@chakra-ui/react"
 
 import { postFormScheme } from "@/utils/validationScheme"
-import type { PostTag } from "@/types/post"
-import type { Post } from "@/types/post"
-import useSWR from 'swr'
 import Checkboxs from "@/components/checkBoxs"
+import type { PostTag } from "@/types/post"
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -20,7 +19,6 @@ type PostForm = {
 }
 
 const EditForm = ({ params }: { params: { id: string }}) => {
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const {data, error, isLoading} = useSWR('/api/store', fetcher)
   
   const {
@@ -28,7 +26,7 @@ const EditForm = ({ params }: { params: { id: string }}) => {
     handleSubmit,
     control,
     setValue,
-    formState: { errors },
+    formState: { errors, dirtyFields },
   } = useForm<PostForm>({
     mode: "onChange",
     shouldUnregister: false,
@@ -38,15 +36,28 @@ const EditForm = ({ params }: { params: { id: string }}) => {
   useEffect(() => {
     if (data) {
       const currentPost = data.sampleData.posts.find((post: any) => post.id === params.id)
-      console.log('currentPost', currentPost)
       if (currentPost) {
-        setSelectedPost(currentPost)
         setValue("title", currentPost.title)
         setValue("contents", currentPost.content)
         setValue("tag", currentPost.tags)
       }
     }
   }, [params.id, data])
+
+  useEffect(() => {
+    const beforeUnload = (e: any) => {
+      if (Object.keys(dirtyFields).length > 0) {
+        e.preventDefault();
+        return e.returnValue = 'You have unsaved changes, are you sure you want to leave?';
+      }
+    };
+
+    window.addEventListener('beforeunload', beforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnload);
+    };
+  }, [dirtyFields]);
   
   const onSubmit = (data: PostForm) => {
     console.log(data)

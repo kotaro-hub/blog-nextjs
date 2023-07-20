@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, HStack } from "@chakra-ui/react"
+import { Badge, Box, HStack } from "@chakra-ui/react"
 import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
 import { usePathname } from "next/navigation"
@@ -13,7 +13,6 @@ const Nav = () => {
     { href: "/", label: "ホーム" },
     { href: "/gallery", label: "一覧" },
     { href: "/post", label: "投稿" },
-    { href: "/edit", label: "編集" },
   ]
 
   return (
@@ -28,6 +27,25 @@ const Nav = () => {
           </Link>
         </Box>
       ))}
+      <Box borderBottom={pathname === "/edit" ? "2px solid" : "none"}>
+        <Link href={"/edit"} _hover={{ textDecoration: "none", opacity: "0.5" }} as={NextLink} position="relative" >
+          編集
+          {
+            <Badge 
+              ml="2" 
+              color="red"
+              colorScheme="red"
+              borderRadius="50%"
+              boxSize="16px"
+              position="absolute"
+              zIndex="-1"
+              top="-8px"
+              right="-8px"
+              textAlign="center"
+            >!</Badge>  
+          }
+        </Link>
+      </Box>
       <SignoutButton />
     </HStack>
   )

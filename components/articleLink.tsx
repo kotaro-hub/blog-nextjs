@@ -1,12 +1,8 @@
 "use client"
 
-import { useEffect } from "react"
 import { Image, Link } from "@chakra-ui/next-js"
 import { useBreakpointValue, Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Grid, GridItem, Heading, Stack, Text, VStack } from "@chakra-ui/react"
 
-import { sampleData } from "@/components/sampleData"
-import { usePostStore } from "@/store/postStore"
-import { useMainStore } from "@/store/mainStore"
 import useSWR from 'swr'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
