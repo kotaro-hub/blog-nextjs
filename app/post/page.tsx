@@ -10,7 +10,7 @@ import Checkboxs from "@/components/checkBoxs"
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
-type PostForm = {
+export type PostForm = {
   title: string,
   contents: string,
   tag: PostTag[],

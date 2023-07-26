@@ -32,9 +32,9 @@ const Nav = () => {
           編集
           {
             <Badge 
-              ml="2" 
-              color="red"
-              colorScheme="red"
+              ml="2"
+              bg="red.500"
+              color="white"
               borderRadius="50%"
               boxSize="16px"
               position="absolute"

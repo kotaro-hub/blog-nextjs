@@ -1,11 +1,12 @@
 "use client"
 
 import useSWR from 'swr'
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Textarea, VStack } from "@chakra-ui/react"
 
+import { useEditStore } from '@/store/editStore'
 import { postFormScheme } from "@/utils/validationScheme"
 import Checkboxs from "@/components/checkBoxs"
 import type { PostTag } from "@/types/post"
@@ -20,19 +21,24 @@ type PostForm = {
 
 const EditForm = ({ params }: { params: { id: string }}) => {
   const {data, error, isLoading} = useSWR('/api/store', fetcher)
+  const { initialFormState, setInitialFormState } = useEditStore()
+  const [ isNotification, setIsNotification ] = useState(false)
   
   const {
     register,
     handleSubmit,
     control,
     setValue,
+    watch,
     formState: { errors, dirtyFields },
   } = useForm<PostForm>({
     mode: "onChange",
     shouldUnregister: false,
     resolver: zodResolver(postFormScheme),
   })
-  
+
+  const currentFormState = watch(["title", "contents", "tag"])
+
   useEffect(() => {
     if (data) {
       const currentPost = data.sampleData.posts.find((post: any) => post.id === params.id)
@@ -40,24 +46,37 @@ const EditForm = ({ params }: { params: { id: string }}) => {
         setValue("title", currentPost.title)
         setValue("contents", currentPost.content)
         setValue("tag", currentPost.tags)
+        setInitialFormState({title: currentPost.title, contents: currentPost.content, tag: currentPost.tags})
       }
     }
   }, [params.id, data])
 
   useEffect(() => {
+    const newNotificationState = JSON.stringify(currentFormState) !== JSON.stringify(initialFormState)
+    console.log(newNotificationState)
+    if (newNotificationState !== isNotification) {
+      setIsNotification(newNotificationState)
+    }
+  }, [currentFormState, initialFormState, isNotification])
+
+  useEffect(() => {
     const beforeUnload = (e: any) => {
       if (Object.keys(dirtyFields).length > 0) {
-        e.preventDefault();
-        return e.returnValue = 'You have unsaved changes, are you sure you want to leave?';
+        e.preventDefault()
+        return e.returnValue = 'You have unsaved changes, are you sure you want to leave?'
       }
-    };
+    }
 
-    window.addEventListener('beforeunload', beforeUnload);
+    window.addEventListener('beforeunload', beforeUnload)
 
     return () => {
-      window.removeEventListener('beforeunload', beforeUnload);
-    };
-  }, [dirtyFields]);
+      window.removeEventListener('beforeunload', beforeUnload)
+    }
+  }, [dirtyFields])
+
+  useEffect(() => {
+    console.log(isNotification)
+  }, [isNotification])
   
   const onSubmit = (data: PostForm) => {
     console.log(data)
