@@ -1,12 +1,13 @@
 "use client"
 
-import { FormControl, FormLabel, FormHelperText, FormErrorMessage, Heading, VStack, Input, Box, Button, Textarea, Checkbox, CheckboxGroup } from "@chakra-ui/react"
-import { Controller, useForm } from "react-hook-form"
 import useSWR from 'swr'
-import { postFormScheme } from "@/utils/validationScheme"
-import type { PostTag } from "@/types/post"
+import { Controller, useForm } from "react-hook-form"
+import { FormControl, FormLabel, FormHelperText, FormErrorMessage, Heading, VStack, Input, Box, Button, Textarea, Checkbox, CheckboxGroup } from "@chakra-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
+
+import { postFormScheme } from "@/utils/validationScheme"
 import Checkboxs from "@/components/checkBoxs"
+import type { PostTag } from "@/types/post"
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 

@@ -30,6 +30,5 @@ const tagsData = {
 }
 
 export async function GET(request: Request) {
-
   return NextResponse.json({ tagsData })
 }

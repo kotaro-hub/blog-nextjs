@@ -1,9 +1,8 @@
 "use client"
 
+import useSWR from 'swr'
 import { Image, Link } from "@chakra-ui/next-js"
 import { useBreakpointValue, Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Grid, GridItem, Heading, Stack, Text, VStack } from "@chakra-ui/react"
-
-import useSWR from 'swr'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 

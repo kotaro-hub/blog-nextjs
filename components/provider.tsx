@@ -1,7 +1,7 @@
 "use client"
 
-import { ChakraProvider } from "@chakra-ui/react"
 import { useEffect } from "react"
+import { ChakraProvider } from "@chakra-ui/react"
 
 import { sampleData } from "./sampleData"
 import { useMainStore } from "@/store/mainStore"

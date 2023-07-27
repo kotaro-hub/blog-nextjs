@@ -7,9 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Textarea, VStack } from "@chakra-ui/react"
 
 import { postFormScheme } from "@/utils/validationScheme"
+import { useNotificationStore } from '@/store/notification'
 import Checkboxs from "@/components/checkBoxs"
 import type { PostTag } from "@/types/post"
-import { useModalStore } from '@/store/modalStore'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -21,7 +21,7 @@ type PostForm = {
 
 const EditForm = ({ params }: { params: { id: string }}) => {
   const {data, error, isLoading} = useSWR('/api/store', fetcher)
-  const { isNotification, setIsNotification } = useModalStore()
+  const { isNotification, setIsNotification } = useNotificationStore()
   const [ initialFormState, setInitialFormState ] = useState<PostForm | null>(null)
   
   const {
@@ -90,10 +90,6 @@ const EditForm = ({ params }: { params: { id: string }}) => {
       window.removeEventListener('beforeunload', beforeUnload)
     }
   }, [dirtyFields])
-
-  useEffect(() => {
-    console.log(isNotification)
-  }, [isNotification])
   
   const onSubmit = (data: PostForm) => {
     console.log(data)

@@ -1,8 +1,9 @@
 "use client"
-import React, { useEffect } from "react"
 
+import React, { useEffect } from "react"
 import { useAuthStore } from "@/store/authStore"
 import { useRouter } from "next/navigation"
+
 import Header from "./header"
 
 const AuthChecker = ({ children }: { children: React.ReactNode }) => {

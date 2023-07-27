@@ -1,13 +1,16 @@
 "use client"
 
-import { Badge, Box, HStack } from "@chakra-ui/react"
 import NextLink from 'next/link'
-import { Link } from '@chakra-ui/react'
 import { usePathname } from "next/navigation"
+import { Link } from '@chakra-ui/react'
+import { Badge, Box, HStack } from "@chakra-ui/react"
+
+import { useNotificationStore } from "@/store/notification"
 import SignoutButton from "@/components/signoutButton"
 
 const Nav = () => {
   const pathname = usePathname()
+  const { isNotification } = useNotificationStore()
 
   const links = [
     { href: "/", label: "ホーム" },
@@ -30,7 +33,7 @@ const Nav = () => {
       <Box borderBottom={pathname === "/edit" ? "2px solid" : "none"}>
         <Link href={"/edit"} _hover={{ textDecoration: "none", opacity: "0.5" }} as={NextLink} position="relative" >
           編集
-          {
+          { isNotification && (
             <Badge 
               ml="2"
               bg="red.500"
@@ -43,7 +46,7 @@ const Nav = () => {
               right="-8px"
               textAlign="center"
             >!</Badge>  
-          }
+          )}
         </Link>
       </Box>
       <SignoutButton />

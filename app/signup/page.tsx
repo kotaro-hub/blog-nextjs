@@ -1,10 +1,11 @@
 "use client"
 
-import { Box, Button, FormControl, FormLabel, Input, Stack, Heading, FormErrorMessage, Flex, ButtonGroup } from "@chakra-ui/react"
+import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Box, Button, FormControl, FormLabel, Input, Stack, Heading, FormErrorMessage, Flex } from "@chakra-ui/react"
+
 import { authFormScheme } from "@/utils/validationScheme"
-import Link from "next/link"
 
 type LoginForm = {
   name: string
