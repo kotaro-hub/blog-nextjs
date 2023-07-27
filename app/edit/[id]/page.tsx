@@ -6,10 +6,10 @@ import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Textarea, VStack } from "@chakra-ui/react"
 
-import { useEditStore } from '@/store/editStore'
 import { postFormScheme } from "@/utils/validationScheme"
 import Checkboxs from "@/components/checkBoxs"
 import type { PostTag } from "@/types/post"
+import { useModalStore } from '@/store/modalStore'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -21,8 +21,8 @@ type PostForm = {
 
 const EditForm = ({ params }: { params: { id: string }}) => {
   const {data, error, isLoading} = useSWR('/api/store', fetcher)
-  const { initialFormState, setInitialFormState } = useEditStore()
-  const [ isNotification, setIsNotification ] = useState(false)
+  const { isNotification, setIsNotification } = useModalStore()
+  const [ initialFormState, setInitialFormState ] = useState<PostForm | null>(null)
   
   const {
     register,
@@ -37,7 +37,11 @@ const EditForm = ({ params }: { params: { id: string }}) => {
     resolver: zodResolver(postFormScheme),
   })
 
-  const currentFormState = watch(["title", "contents", "tag"])
+  const currentFormState = {
+    title: watch("title"),
+    contents: watch("contents"),
+    tag: watch("tag")
+  }
 
   useEffect(() => {
     if (data) {
@@ -46,18 +50,31 @@ const EditForm = ({ params }: { params: { id: string }}) => {
         setValue("title", currentPost.title)
         setValue("contents", currentPost.content)
         setValue("tag", currentPost.tags)
-        setInitialFormState({title: currentPost.title, contents: currentPost.content, tag: currentPost.tags})
+        setInitialFormState({
+          title: currentPost.title,
+          contents: currentPost.content,
+          tag: currentPost.tags
+        })
       }
     }
   }, [params.id, data])
 
   useEffect(() => {
-    const newNotificationState = JSON.stringify(currentFormState) !== JSON.stringify(initialFormState)
-    console.log(newNotificationState)
-    if (newNotificationState !== isNotification) {
-      setIsNotification(newNotificationState)
+    // currentFormStateに値が入っているか
+    const isCurrentFormState = 
+      currentFormState.title !== undefined &&
+      currentFormState.contents !== undefined &&
+      currentFormState.tag !== undefined
+
+    if (isCurrentFormState) {
+      const newNotificationState =
+        JSON.stringify(currentFormState) !== JSON.stringify(initialFormState);
+      if (newNotificationState !== isNotification) {
+        setIsNotification(newNotificationState);
+      }
     }
-  }, [currentFormState, initialFormState, isNotification])
+  }, [currentFormState, initialFormState, isNotification]);
+  
 
   useEffect(() => {
     const beforeUnload = (e: any) => {

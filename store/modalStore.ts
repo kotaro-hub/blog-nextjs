@@ -2,10 +2,10 @@ import { create } from "zustand"
 
 type Store = {
   isOpen: boolean,
-  isNotification: boolean,
+  isNotification: boolean, // 編集中のものあるかないかフラグ
   onClose: () => void,
   onOpen: () => void,
-  setNotification: (bool: boolean) => void
+  setIsNotification: (bool: boolean) => void
 }
 
 export const useModalStore = create<Store> (set => ({
@@ -13,5 +13,5 @@ export const useModalStore = create<Store> (set => ({
   isNotification: false,
   onClose: () => set({ isOpen: false }),
   onOpen: () => set({ isOpen: true }),
-  setNotification: (bool) => set({ isNotification: bool })
+  setIsNotification: (bool) => set({ isNotification: bool })
 }))
