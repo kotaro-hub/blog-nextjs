@@ -59,7 +59,7 @@ const Signup = () => {
           </form>
           <Box textAlign="center">
             <Link href="/signin">
-              <Button w="full" maxW="32" variant="solid" colorScheme="blue">
+              <Button w="full" maxW="32"  colorScheme="blue">
                 ログインする
               </Button>
             </Link>

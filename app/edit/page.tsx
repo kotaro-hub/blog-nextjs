@@ -41,7 +41,7 @@ const Edit = () => {
             <Divider />
             <CardFooter justifyContent="center">
               <Link href={`/edit/${post.id}`}>
-                <Button variant="solid" colorScheme="blue">
+                <Button  colorScheme="blue">
                   編集する
                 </Button>
               </Link>

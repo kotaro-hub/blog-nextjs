@@ -22,7 +22,7 @@ const SignoutButton = () => {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg="white" color="black" boxShadow="xl">
           <ModalHeader>サインアウト</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
