@@ -43,7 +43,7 @@ const EditForm = ({ params }: { params: { id: string }}) => {
     contents: watch("contents"),
     tag: watch("tag")
   }
-
+  
   useEffect(() => {
     if (data) {
       const currentPost = data.sampleData.posts.find((post: any) => post.id === params.id)
@@ -59,14 +59,14 @@ const EditForm = ({ params }: { params: { id: string }}) => {
       }
     }
   }, [params.id, data])
-
+  
   useEffect(() => {
     // currentFormStateに値が入っているか
     const isCurrentFormState = 
-      currentFormState.title !== undefined &&
-      currentFormState.contents !== undefined &&
-      currentFormState.tag !== undefined
-        
+    currentFormState.title !== undefined &&
+    currentFormState.contents !== undefined &&
+    currentFormState.tag !== undefined
+    
     if (isCurrentFormState) {
       const newNotificationState = JSON.stringify(currentFormState) !== JSON.stringify(initialFormState);
       if (newNotificationState !== isNotification) {
@@ -74,15 +74,15 @@ const EditForm = ({ params }: { params: { id: string }}) => {
       }
     }
   }, [currentFormState, initialFormState, isNotification])
-
+  
   useEffect(() => {
     const isUpdateLastEditedPost = JSON.stringify(currentFormState) !== JSON.stringify(lastEditedPost)
     if (isUpdateLastEditedPost) {
       setEditedPost(currentFormState)
       setLastEditedPost(currentFormState)
     }
-  }, [JSON.stringify(currentFormState), JSON.stringify(lastEditedPost)])
-
+  }, [currentFormState.title, currentFormState.contents, currentFormState.tag, lastEditedPost])
+  
   useEffect(() => {
     const beforeUnload = (e: any) => {
       if (Object.keys(dirtyFields).length > 0) {
@@ -90,9 +90,9 @@ const EditForm = ({ params }: { params: { id: string }}) => {
         return e.returnValue = 'You have unsaved changes, are you sure you want to leave?'
       }
     }
-
+    
     window.addEventListener('beforeunload', beforeUnload)
-
+    
     return () => {
       window.removeEventListener('beforeunload', beforeUnload)
     }
@@ -102,10 +102,9 @@ const EditForm = ({ params }: { params: { id: string }}) => {
     console.log(data)
   }
   
-  if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
-  if (!data) return <div>Loading...</div>
-
+  if (isLoading) return <div>Loading...</div>
+  
   return(
     <>
       <VStack spacing="6" p="6">
@@ -129,8 +128,8 @@ const EditForm = ({ params }: { params: { id: string }}) => {
                 name="tag"
                 render={({ field: { onChange, value } }) => (
                   <Checkboxs value={value} onChange={(values) => onChange(values)} />
-                )}
-              />
+                  )}
+                  />
               <FormErrorMessage>{ errors.tag?.message }</FormErrorMessage>
             </FormControl>
             <Box textAlign="center">
