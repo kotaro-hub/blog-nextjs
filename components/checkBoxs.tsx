@@ -16,8 +16,6 @@ const Checkboxs = (props: Props) => {
   const { value, onChange } = props
   const {data, error, isLoading} = useSWR('/api/tags', fetcher)
 
-  console.log('value', value)
-
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Loading...</div>

@@ -1,15 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import useSWR from 'swr'
+import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Textarea, VStack } from "@chakra-ui/react"
 
 import { postFormScheme } from "@/utils/validationScheme"
-import type { PostTag } from "@/types/post"
-import type { Post } from "@/types/post"
-import useSWR from 'swr'
+import { useNotificationStore } from '@/store/notification'
 import Checkboxs from "@/components/checkBoxs"
+import type { PostTag } from "@/types/post"
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -20,33 +20,83 @@ type PostForm = {
 }
 
 const EditForm = ({ params }: { params: { id: string }}) => {
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const {data, error, isLoading} = useSWR('/api/store', fetcher)
+  const { isNotification, setIsNotification, setEditedPost } = useNotificationStore()
+  const [ initialFormState, setInitialFormState ] = useState<PostForm | null>(null)
+  const [ lastEditedPost, setLastEditedPost ] = useState<PostForm | null>(null)
   
   const {
     register,
     handleSubmit,
     control,
     setValue,
-    formState: { errors },
+    watch,
+    formState: { errors, dirtyFields },
   } = useForm<PostForm>({
     mode: "onChange",
     shouldUnregister: false,
     resolver: zodResolver(postFormScheme),
   })
-  
+
+  const currentFormState = {
+    title: watch("title"),
+    contents: watch("contents"),
+    tag: watch("tag")
+  }
+
   useEffect(() => {
     if (data) {
       const currentPost = data.sampleData.posts.find((post: any) => post.id === params.id)
-      console.log('currentPost', currentPost)
       if (currentPost) {
-        setSelectedPost(currentPost)
         setValue("title", currentPost.title)
         setValue("contents", currentPost.content)
         setValue("tag", currentPost.tags)
+        setInitialFormState({
+          title: currentPost.title,
+          contents: currentPost.content,
+          tag: currentPost.tags
+        })
       }
     }
   }, [params.id, data])
+
+  useEffect(() => {
+    // currentFormStateに値が入っているか
+    const isCurrentFormState = 
+      currentFormState.title !== undefined &&
+      currentFormState.contents !== undefined &&
+      currentFormState.tag !== undefined
+        
+    if (isCurrentFormState) {
+      const newNotificationState = JSON.stringify(currentFormState) !== JSON.stringify(initialFormState);
+      if (newNotificationState !== isNotification) {
+        setIsNotification(newNotificationState)
+      }
+    }
+  }, [currentFormState, initialFormState, isNotification])
+
+  useEffect(() => {
+    const isUpdateLastEditedPost = JSON.stringify(currentFormState) !== JSON.stringify(lastEditedPost)
+    if (isUpdateLastEditedPost) {
+      setEditedPost(currentFormState)
+      setLastEditedPost(currentFormState)
+    }
+  }, [JSON.stringify(currentFormState), JSON.stringify(lastEditedPost)])
+
+  useEffect(() => {
+    const beforeUnload = (e: any) => {
+      if (Object.keys(dirtyFields).length > 0) {
+        e.preventDefault()
+        return e.returnValue = 'You have unsaved changes, are you sure you want to leave?'
+      }
+    }
+
+    window.addEventListener('beforeunload', beforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnload)
+    }
+  }, [dirtyFields])
   
   const onSubmit = (data: PostForm) => {
     console.log(data)

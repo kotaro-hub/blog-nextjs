@@ -1,13 +1,13 @@
 "use client"
 
-import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react"
-import { useModalStore } from "@/store/modalStore"
-import { useAuthStore } from "@/store/authStore"
 import { useRouter } from "next/navigation"
+import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react"
+
+import { useAuthStore } from "@/store/authStore"
 
 const SignoutButton = () => {
   const router = useRouter()
-  const { isOpen, onOpen, onClose } = useModalStore()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const { logOut } = useAuthStore()
 
   const handleSignOut = () => {
@@ -22,7 +22,7 @@ const SignoutButton = () => {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg="white" color="black" boxShadow="xl">
           <ModalHeader>サインアウト</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

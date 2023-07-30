@@ -1,9 +1,8 @@
 "use client"
 
+import useSWR from 'swr'
 import { Image, Link } from "@chakra-ui/next-js"
 import { useBreakpointValue, Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Grid, GridItem, Heading, Stack, Text, VStack } from "@chakra-ui/react"
-
-import useSWR from 'swr'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -43,12 +42,12 @@ const Gallery = () => {
             <CardFooter justifyContent="center">
               <ButtonGroup spacing="2">
                 <Link href={`/detail/${data.id}`}>
-                  <Button variant="solid" colorScheme="blue">
+                  <Button colorScheme="blue" width="144px" _hover={{ opacity: "0.7" }}>
                     この記事を見る
                   </Button>
                 </Link>
                 <Link href={`/edit/${data.id}`}>
-                  <Button variant="ghost" colorScheme="blue">
+                  <Button bg="teal.500" color="white" width="144px" _hover={{ opacity: "0.7" }}>
                     編集する
                   </Button>
                 </Link>

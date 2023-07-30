@@ -1,10 +1,11 @@
 "use client"
 
+import Link from "next/link"
 import { Box, Button, FormControl, FormLabel, Input, Stack, Heading, FormErrorMessage, Flex } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+
 import { authFormScheme } from "@/utils/validationScheme"
-import Link from "next/link"
 
 type LoginForm = {
   name: string
@@ -58,7 +59,7 @@ const SignIn = () => {
           </form>
           <Box textAlign="center">
             <Link href="/signup">
-              <Button variant="solid" colorScheme="blue">
+              <Button  colorScheme="blue">
                 新規登録
               </Button>
             </Link>
