@@ -21,8 +21,9 @@ type PostForm = {
 
 const EditForm = ({ params }: { params: { id: string }}) => {
   const {data, error, isLoading} = useSWR('/api/store', fetcher)
-  const { isNotification, setIsNotification } = useNotificationStore()
+  const { isNotification, editedPost, setIsNotification, setEditedPost } = useNotificationStore()
   const [ initialFormState, setInitialFormState ] = useState<PostForm | null>(null)
+  const [ lastEditedPost, setLastEditedPost ] = useState<PostForm | null>(null)
   
   const {
     register,
@@ -65,17 +66,27 @@ const EditForm = ({ params }: { params: { id: string }}) => {
       currentFormState.title !== undefined &&
       currentFormState.contents !== undefined &&
       currentFormState.tag !== undefined
-
+        
     if (isCurrentFormState) {
-      const newNotificationState =
-        JSON.stringify(currentFormState) !== JSON.stringify(initialFormState);
+      const newNotificationState = JSON.stringify(currentFormState) !== JSON.stringify(initialFormState);
       if (newNotificationState !== isNotification) {
-        setIsNotification(newNotificationState);
+        setIsNotification(newNotificationState)
       }
     }
-  }, [currentFormState, initialFormState, isNotification]);
-  
+  }, [currentFormState, initialFormState, isNotification])
 
+  useEffect(() => {
+    const isUpdateLastEditedPost = JSON.stringify(currentFormState) !== JSON.stringify(lastEditedPost)
+    if (isUpdateLastEditedPost) {
+      setEditedPost(currentFormState)
+      setLastEditedPost(currentFormState)
+    }
+  }, [JSON.stringify(currentFormState), JSON.stringify(lastEditedPost)])
+
+  useEffect(() => {
+    console.log(editedPost)
+  }, [editedPost])
+  
   useEffect(() => {
     const beforeUnload = (e: any) => {
       if (Object.keys(dirtyFields).length > 0) {
