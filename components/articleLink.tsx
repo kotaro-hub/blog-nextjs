@@ -42,7 +42,7 @@ const ArticleLink = () => {
             <CardFooter justifyContent="center">
               <ButtonGroup spacing="2">
                 <Link href={`/detail/${post.id}`}>
-                  <Button  colorScheme="blue" _hover={{ opacity: "0.7" }}>
+                  <Button colorScheme="blue" _hover={{ opacity: "0.7" }}>
                     この記事を見る
                   </Button>
                 </Link>

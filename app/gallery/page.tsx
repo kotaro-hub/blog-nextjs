@@ -42,12 +42,12 @@ const Gallery = () => {
             <CardFooter justifyContent="center">
               <ButtonGroup spacing="2">
                 <Link href={`/detail/${data.id}`}>
-                  <Button colorScheme="blue" _hover={{ opacity: "0.7" }}>
+                  <Button colorScheme="blue" width="144px" _hover={{ opacity: "0.7" }}>
                     この記事を見る
                   </Button>
                 </Link>
                 <Link href={`/edit/${data.id}`}>
-                  <Button bg="teal.500" color="white" _hover={{ opacity: "0.7" }}>
+                  <Button bg="teal.500" color="white" width="144px" _hover={{ opacity: "0.7" }}>
                     編集する
                   </Button>
                 </Link>
