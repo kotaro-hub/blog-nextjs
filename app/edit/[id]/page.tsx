@@ -21,7 +21,7 @@ type PostForm = {
 
 const EditForm = ({ params }: { params: { id: string }}) => {
   const {data, error, isLoading} = useSWR('/api/store', fetcher)
-  const { isNotification, editedPost, setIsNotification, setEditedPost } = useNotificationStore()
+  const { isNotification, setIsNotification, setEditedPost } = useNotificationStore()
   const [ initialFormState, setInitialFormState ] = useState<PostForm | null>(null)
   const [ lastEditedPost, setLastEditedPost ] = useState<PostForm | null>(null)
   
@@ -83,10 +83,6 @@ const EditForm = ({ params }: { params: { id: string }}) => {
     }
   }, [JSON.stringify(currentFormState), JSON.stringify(lastEditedPost)])
 
-  useEffect(() => {
-    console.log(editedPost)
-  }, [editedPost])
-  
   useEffect(() => {
     const beforeUnload = (e: any) => {
       if (Object.keys(dirtyFields).length > 0) {
