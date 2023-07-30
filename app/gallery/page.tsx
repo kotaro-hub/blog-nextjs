@@ -15,8 +15,8 @@ const Gallery = () => {
     lg: "repeat(4, 1fr)",
   })
 
-  if (error) return <div>Failed to load</div>
   if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Failed to load</div>
 
   return (
     <Grid templateColumns={gridColumns} gap={6} mt="12">

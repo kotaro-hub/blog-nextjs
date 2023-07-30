@@ -35,8 +35,8 @@ const Post = () => {
     console.log(data)
   }
   
-  if (error) return <div>Failed to load</div>
   if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Failed to load</div>
 
   return (
     <VStack spacing="6" p="6">
