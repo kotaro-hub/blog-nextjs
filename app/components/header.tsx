@@ -3,8 +3,8 @@
 import { Link } from "@chakra-ui/next-js"
 import { Box, Heading, HStack, Spacer } from "@chakra-ui/react"
 
-import DrawerMenu from "@/components/drawerMenu"
-import Nav from "@/components/nav"
+import DrawerMenu from "@/app/components/drawerMenu"
+import Nav from "@/app/components/nav"
 
 const Header = () => {
   return (

@@ -6,8 +6,9 @@ import { FormControl, FormLabel, FormHelperText, FormErrorMessage, Heading, VSta
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { postFormScheme } from "@/utils/validationScheme"
-import Checkboxs from "@/components/checkBoxs"
+import Checkboxs from "@/app/components/checkBoxs"
 import type { PostTag } from "@/types/post"
+import ImageUploader from '@/app/components/imageUploader'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -66,6 +67,7 @@ const Post = () => {
             />
             <FormErrorMessage>{ errors.tag?.message }</FormErrorMessage>
           </FormControl>
+          <ImageUploader />
           <Box textAlign="center">
             <Button w="full" maxW="32" mt="8" colorScheme="blue" type="submit">
               内容を確認する

@@ -6,7 +6,7 @@ import { Link } from '@chakra-ui/react'
 import { Badge, Box, HStack } from "@chakra-ui/react"
 
 import { useNotificationStore } from "@/store/notification"
-import SignoutButton from "@/components/signoutButton"
+import SignoutButton from "@/app/components/signoutButton"
 
 const Nav = () => {
   const pathname = usePathname()

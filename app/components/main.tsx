@@ -1,4 +1,4 @@
-import ArticleLink from "@/components/articleLink"
+import ArticleLink from "@/app/components/articleLink"
 
 const Main = () => {
   return (

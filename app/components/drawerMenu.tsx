@@ -4,7 +4,7 @@ import { useRef } from "react"
 import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from "@chakra-ui/react"
 import { HamburgerIcon } from "@chakra-ui/icons"
 
-import Nav from "@/components/nav"
+import Nav from "@/app/components/nav"
 
 const DrawerMenu = () => {
   // useDisclosureで閉じ・開きの管理
