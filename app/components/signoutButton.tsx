@@ -1,19 +1,14 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { signOut } from "next-auth/react"
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react"
 
-import { useAuthStore } from "@/store/authStore"
-
 const SignoutButton = () => {
-  const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { logOut } = useAuthStore()
 
   const handleSignOut = () => {
-    router.push("/signin")
     onClose()
-    logOut()
+    signOut()
   }
 
   return (

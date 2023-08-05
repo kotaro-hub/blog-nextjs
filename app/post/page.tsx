@@ -6,9 +6,9 @@ import { FormControl, FormLabel, FormHelperText, FormErrorMessage, Heading, VSta
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { postFormScheme } from "@/utils/validationScheme"
-import Checkboxs from "@/components/checkBoxs"
+import Checkboxs from "@/app/components/checkBoxs"
 import type { PostTag } from "@/types/post"
-import ImageUploader from '@/components/imageUploader'
+import ImageUploader from '@/app/components/imageUploader'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 

@@ -1,13 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { signIn } from "next-auth/react"
 import { Box, Button, FormControl, FormLabel, Input, Stack, Heading, FormErrorMessage, Flex } from "@chakra-ui/react"
 
 import { authFormScheme } from "@/utils/validationScheme"
-import { useAuthStore } from "@/store/authStore"
 
 type LoginForm = {
   name: string
@@ -16,9 +15,6 @@ type LoginForm = {
 }
 
 const Signin = () => {
-  const router = useRouter()
-  const { logIn } = useAuthStore()
-
   const {
     register,
     handleSubmit,
@@ -29,14 +25,9 @@ const Signin = () => {
     resolver: zodResolver(authFormScheme),
   })
 
-  const onSubmit = (data: any) => {
-    console.log(data)
-  }
-
-  const onClickSignIn = () => {
-    // ログイン処理走る
-    router.push("/")
-    logIn()
+  const onSubmit = (data: LoginForm) => {
+    const { email, password } = data
+    signIn('credentials', {email, password, redirect: true, callbackUrl: '/'})
   }
 
   return (
@@ -57,8 +48,13 @@ const Signin = () => {
               <Input type="password" {...register("password")} />
               <FormErrorMessage>{errors.password?.message as React.ReactNode}</FormErrorMessage>
             </FormControl>
+            <Box textAlign="right">
+              <Link href="/forgot-password">
+                <Box color="blue" fontSize="small" mt="1">パスワードを忘れた場合</Box>
+              </Link>
+            </Box>
             <Box textAlign="center">
-              <Button onClick={onClickSignIn} w="full" maxW="32" mt="4" colorScheme="teal" type="submit">
+              <Button w="full" maxW="32" mt="4" colorScheme="teal" type="submit">
                 ログインする
               </Button>
             </Box>

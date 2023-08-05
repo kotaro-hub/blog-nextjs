@@ -8,7 +8,7 @@ import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, 
 
 import { postFormScheme } from "@/utils/validationScheme"
 import { useNotificationStore } from '@/store/notification'
-import Checkboxs from "@/components/checkBoxs"
+import Checkboxs from "@/app/components/checkBoxs"
 import type { PostTag } from "@/types/post"
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())

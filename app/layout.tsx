@@ -1,8 +1,8 @@
 import "./globals.css"
 import { Roboto } from "next/font/google"
 
-import Provider from "@/components/provider"
-import AuthChecker from "@/components/authChecker"
+import Provider from "@/app/components/provider"
+import SessionProvider from "@/app/components/sessionProvider"
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -17,15 +17,15 @@ export const metadata = {
 }
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
-
+  
   return (
     <html lang="ja">
       <body className={roboto.className}>
-        <Provider>
-          <AuthChecker>
+        <SessionProvider>
+          <Provider>
             {children}  
-          </AuthChecker>
-        </Provider>
+          </Provider>
+        </SessionProvider>
       </body>
     </html>
   )
